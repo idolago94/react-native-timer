@@ -6,9 +6,15 @@ export interface TimerProps {
   hours: number;
   minutes?: number;
   seconds?: number;
+  autoStart?: boolean;
 }
 
-const Timer: React.FC<TimerProps> = ({ hours, minutes = 0, seconds }) => {
+const Timer: React.FC<TimerProps> = ({
+  hours,
+  minutes = 0,
+  seconds,
+  autoStart,
+}) => {
   const [time, setTime] = useState<{
     hours: number;
     minutes: number;
@@ -16,9 +22,7 @@ const Timer: React.FC<TimerProps> = ({ hours, minutes = 0, seconds }) => {
   }>({ hours, minutes, seconds });
   let timerRef: NodeJS.Timer | null = null;
   useEffect((): any => {
-    setTimeout(() => {
-      startTimer();
-    }, 3000);
+    autoStart && startTimer();
     return () => timerRef && clearInterval(timerRef);
   });
 
@@ -54,10 +58,5 @@ const Timer: React.FC<TimerProps> = ({ hours, minutes = 0, seconds }) => {
     </Text>
   );
 };
-
-// Timer.propTypes = {
-
-//     // onPress: PropTypes.func,
-// };
 
 export default Timer;
