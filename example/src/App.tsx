@@ -6,7 +6,7 @@ import Timer from 'react-native-timer';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Timer hours={22} seconds={20} />
+      <Timer seconds={5} autoStart  />
     </View>
   );
 }

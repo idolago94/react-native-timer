@@ -1,34 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Text } from 'react-native';
 // import PropTypes from 'prop-types';
 
 export interface TimerProps {
-  hours: number;
+  hours?: number;
   minutes?: number;
   seconds?: number;
   autoStart?: boolean;
 }
 
 const Timer: React.FC<TimerProps> = ({
-  hours,
+  hours = 0,
   minutes = 0,
   seconds,
-  autoStart,
+  autoStart
 }) => {
   const [time, setTime] = useState<{
     hours: number;
     minutes: number;
     seconds?: number;
   }>({ hours, minutes, seconds });
-  let timerRef: NodeJS.Timer | null = null;
+  let timerRef: ReturnType<typeof setInterval> = setInterval(() => {  });
   useEffect((): any => {
+    console.log('---- useEffect ----');
     autoStart && startTimer();
     return () => timerRef && clearInterval(timerRef);
-  });
+  }, []);
 
-  const startTimer = (): void => {
-    timerRef = setInterval(continueTimer, seconds !== undefined ? 1000 : 10000);
-  };
+  const startTimer = (): void => { console.log("---- startTimer ----"); timerRef = setInterval(continueTimer, seconds !== undefined ? 1000 : 10000) };
+
+  const stopTimer = (): void => { console.log("---- stopTimer ----"); clearInterval(timerRef) }
 
   const continueTimer = (): void => {
     let newTimeObj = time;
@@ -42,7 +43,7 @@ const Timer: React.FC<TimerProps> = ({
       newTimeObj.minutes = 59;
       newTimeObj.seconds = 59;
     } else {
-      timerRef !== null && clearInterval(timerRef);
+      stopTimer();
     }
     setTime({ ...newTimeObj });
   };
