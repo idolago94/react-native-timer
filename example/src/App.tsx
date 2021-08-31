@@ -1,12 +1,16 @@
 import * as React from 'react';
 
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Button } from 'react-native';
 import Timer from 'react-native-timer';
 
 export default function App() {
+  const timer = React.useRef<typeof Timer>(null)
   return (
     <View style={styles.container}>
-      <Timer seconds={5} autoStart  />
+      <Timer ref={timer} seconds={5} />
+      <Button title='START' onPress={() => timer?.current?.start()} />
+      <Button title='STOP' onPress={() => timer?.current?.stop()} />
+      <Button title='RESET' onPress={() => timer?.current?.reset()} />
     </View>
   );
 }

@@ -1,33 +1,56 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import { Text } from 'react-native';
 // import PropTypes from 'prop-types';
 
-export interface TimerProps {
+// export interface TimerProps {
+//   hours?: number;
+//   minutes?: number;
+//   seconds?: number;
+//   autoStart?: boolean;
+//   ref?: any;
+// }
+
+type TimerProps = {
   hours?: number;
   minutes?: number;
   seconds?: number;
   autoStart?: boolean;
+  ref?: any;
 }
 
-const Timer: React.FC<TimerProps> = ({
+const Timer: React.FC<TimerProps> = forwardRef(({
   hours = 0,
   minutes = 0,
   seconds,
   autoStart
-}) => {
+}, ref) => {
+  let timerRef: ReturnType<typeof setInterval> = setInterval(() => { });
   const [time, setTime] = useState<{
     hours: number;
     minutes: number;
     seconds?: number;
   }>({ hours, minutes, seconds });
-  let timerRef: ReturnType<typeof setInterval> = setInterval(() => {  });
   useEffect((): any => {
-    console.log('---- useEffect ----');
     autoStart && startTimer();
     return () => timerRef && clearInterval(timerRef);
   }, []);
 
-  const startTimer = (): void => { console.log("---- startTimer ----"); timerRef = setInterval(continueTimer, seconds !== undefined ? 1000 : 10000) };
+  useImperativeHandle(ref, () => ({
+    start: startTimer,
+    reset: resetTimer,
+    stop: stopTimer
+  }));
+
+  const resetTimer = (): void => { console.log('---- resetTimer ----'); setTime({ hours, minutes, seconds }) }
+
+  const startTimer = (): void => { 
+    if (!time.hours && !time.minutes && !time.seconds) {
+      console.warn('Can not start timer from zero!')
+      return
+    }
+    console.log("---- startTimer ----"); 
+    timerRef = setInterval(continueTimer, seconds !== undefined ? 1000 : 10000) 
+  }
 
   const stopTimer = (): void => { console.log("---- stopTimer ----"); clearInterval(timerRef) }
 
@@ -44,8 +67,9 @@ const Timer: React.FC<TimerProps> = ({
       newTimeObj.seconds = 59;
     } else {
       stopTimer();
+      return
     }
-    setTime({ ...newTimeObj });
+    setTime({ ...newTimeObj })
   };
 
   const getTime = (v: number): string => (v < 10 ? '0' + v : v.toString());
@@ -58,6 +82,6 @@ const Timer: React.FC<TimerProps> = ({
         : `:${time.seconds ? getTime(time.seconds) : '00'}`}
     </Text>
   );
-};
+})
 
 export default Timer;
