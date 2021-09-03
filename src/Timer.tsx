@@ -24,7 +24,7 @@ const Timer: React.FC<TimerProps> = forwardRef(({
   seconds,
   autoStart
 }, ref) => {
-  let timerRef: ReturnType<typeof setInterval> = setInterval(() => { });
+  let timerRef: ReturnType<typeof setInterval> | null = null;
   const [time, setTime] = useState<{
     hours: number;
     minutes: number;
@@ -41,7 +41,10 @@ const Timer: React.FC<TimerProps> = forwardRef(({
     stop: stopTimer
   }));
 
-  const resetTimer = (): void => { console.log('---- resetTimer ----'); setTime({ hours, minutes, seconds }) }
+  const resetTimer = (): void => { 
+    console.log('---- resetTimer ----'); 
+    setTime({ hours, minutes, seconds }) 
+  }
 
   const startTimer = (): void => { 
     if (!time.hours && !time.minutes && !time.seconds) {
@@ -52,7 +55,14 @@ const Timer: React.FC<TimerProps> = forwardRef(({
     timerRef = setInterval(continueTimer, seconds !== undefined ? 1000 : 10000) 
   }
 
-  const stopTimer = (): void => { console.log("---- stopTimer ----"); clearInterval(timerRef) }
+  const stopTimer = (): void => { 
+    if (!timerRef) {
+      console.warn('Timer is not running!')
+      return
+    }
+    console.log("---- stopTimer ----"); 
+    clearInterval(timerRef); 
+  }
 
   const continueTimer = (): void => {
     let newTimeObj = time;
