@@ -40,16 +40,6 @@ export default function App() {
   );
 }
 ```
-  hours?: number;
-  minutes?: number;
-  seconds?: number;
-  autoStart?: boolean;
-  onStart?: Function;
-  onEnd?: Function;
-  style?: Object;
-  onPress?: Function;
-
-  ref?: any;
 
 ## Available props
 
