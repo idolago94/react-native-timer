@@ -12,6 +12,7 @@ export default function App() {
         ref={timer}
         seconds={5}
         onStart={() => { console.log('Timer Start !!!!!'); }}
+        onEnd={() => { console.log('Timer Finished !!!!!'); }}
       />
       <Button title='START' onPress={() => timer.current?.start()} />
       <Button title='STOP' onPress={() => timer.current?.stop()} />
