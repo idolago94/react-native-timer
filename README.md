@@ -12,6 +12,7 @@ npm install react-native-timer
 
 ```js
 import Timer from "react-native-timer";
+import type { TimerHandle } from 'src/Timer';
 
 // ...
 
@@ -39,6 +40,30 @@ export default function App() {
   );
 }
 ```
+  hours?: number;
+  minutes?: number;
+  seconds?: number;
+  autoStart?: boolean;
+  onStart?: Function;
+  onEnd?: Function;
+  style?: Object;
+  onPress?: Function;
+
+  ref?: any;
+
+## Available props
+
+| Name                             | Type                 | Default                        | Description                                                                                                                                |
+| -------------------------------- | -------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `hours`                          | `number`             | `0`                            | Hours to start timer |
+| `minutes`                        | `number`             | `0`                            | Minutes to start timer |
+| `seconds`                        | `number`             | `null`                         | Seconds to start timer |
+| `autoStart`                      | `boolean`            | `false`                        | Start the timer automatically |
+| `onStart`                        | `func`               | `() => null`                   | Called when the timer start running |
+| `onEnd`                          | `func`               | `() => null`                   | Called when the timer end |
+| `onPress`                        | `func`               | `() => null`                   | Called when the timer pressed |
+| `style`                          | `object`             | `null`                         | Timer style |
+                                              
 
 ## Contributing
 
