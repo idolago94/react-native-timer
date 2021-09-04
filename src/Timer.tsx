@@ -64,7 +64,7 @@ const Timer = forwardRef<TimerHandle, TimerProps>(({
       return
     }
     console.log("---- startTimer ----");
-    timeInterval.current = setInterval(continueTimer, seconds !== undefined ? 1000 : 10000)
+    timeInterval.current = setInterval(continueTimer, initValues.seconds !== undefined ? 1000 : 10000)
   }
 
   const stopTimer = (): void => {
@@ -79,7 +79,7 @@ const Timer = forwardRef<TimerHandle, TimerProps>(({
 
   const continueTimer = (): void => {
     let newTimeObj = time;
-    if (seconds !== undefined && newTimeObj.seconds && newTimeObj.seconds > 0) {
+    if (initValues.seconds !== undefined && newTimeObj.seconds && newTimeObj.seconds > 0) {
       newTimeObj.seconds -= 1;
     } else if (newTimeObj && newTimeObj.minutes > 0) {
       newTimeObj.minutes -= 1;
@@ -100,7 +100,7 @@ const Timer = forwardRef<TimerHandle, TimerProps>(({
   return (
     <Text>
       {getTime(time.hours)}:{getTime(time.minutes)}
-      {seconds === undefined
+      {initValues.seconds === undefined
         ? ''
         : `:${time.seconds ? getTime(time.seconds) : '00'}`}
     </Text>
