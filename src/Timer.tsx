@@ -1,14 +1,5 @@
 import React, { useEffect, useState, forwardRef, useImperativeHandle, useRef } from 'react';
 import { Text } from 'react-native';
-// import PropTypes from 'prop-types';
-
-// export interface TimerProps {
-//   hours?: number;
-//   minutes?: number;
-//   seconds?: number;
-//   autoStart?: boolean;
-//   ref?: any;
-// }
 
 type TimerProps = {
   hours?: number;
@@ -18,18 +9,26 @@ type TimerProps = {
   ref?: any;
 }
 
-const Timer: React.FC<TimerProps> = forwardRef(({
+type TimeState = {
+  hours: number;
+  minutes: number;
+  seconds?: number;
+}
+
+export type TimerHandle = {
+  start: any;
+  stop: any;
+  reset: any;
+}
+
+const Timer = forwardRef<TimerHandle, TimerProps>(({
   hours = 0,
   minutes = 0,
   seconds,
   autoStart
 }, ref) => {
   let timeInterval = useRef<ReturnType<typeof setInterval> | null>()
-  const [time, setTime] = useState<{
-    hours: number;
-    minutes: number;
-    seconds?: number;
-  }>({ hours, minutes, seconds });
+  const [time, setTime] = useState<TimeState>({ hours, minutes, seconds });
   useEffect((): any => {
     autoStart && startTimer();
     return () => timeInterval.current && clearInterval(timeInterval.current);
