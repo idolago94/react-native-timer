@@ -6,6 +6,8 @@ type TimerProps = {
   minutes?: number;
   seconds?: number;
   autoStart?: boolean;
+  onStart?: Function;
+
   ref?: any;
 }
 
@@ -25,7 +27,8 @@ const Timer = forwardRef<TimerHandle, TimerProps>(({
   hours = 0,
   minutes = 0,
   seconds,
-  autoStart
+  autoStart,
+  onStart
 }, ref) => {
   let timeInterval = useRef<ReturnType<typeof setInterval> | null>()
   const [time, setTime] = useState<TimeState>({ hours, minutes, seconds });
@@ -65,6 +68,7 @@ const Timer = forwardRef<TimerHandle, TimerProps>(({
     }
     console.log("---- startTimer ----");
     timeInterval.current = setInterval(continueTimer, initValues.seconds !== undefined ? 1000 : 10000)
+    onStart && onStart()
   }
 
   const stopTimer = (): void => {
