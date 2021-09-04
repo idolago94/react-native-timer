@@ -10,8 +10,8 @@ type TimerProps = {
 }
 
 type TimeState = {
-  hours: number;
-  minutes: number;
+  hours?: number;
+  minutes?: number;
   seconds?: number;
 }
 
@@ -29,6 +29,7 @@ const Timer = forwardRef<TimerHandle, TimerProps>(({
 }, ref) => {
   let timeInterval = useRef<ReturnType<typeof setInterval> | null>()
   const [time, setTime] = useState<TimeState>({ hours, minutes, seconds });
+  const [initValues, setInitValues] = useState<TimeState>({ hours, minutes, seconds });
   useEffect((): any => {
     autoStart && startTimer();
     return () => timeInterval.current && clearInterval(timeInterval.current);
@@ -40,10 +41,16 @@ const Timer = forwardRef<TimerHandle, TimerProps>(({
     stop: stopTimer
   }));
 
-  const resetTimer = (): void => {
+  const resetTimer = (newValues?: TimeState): void => {
     console.log('---- resetTimer ----');
     if (timeInterval.current) stopTimer()
-    setTime({ hours, minutes, seconds })
+
+    if (newValues) {
+      console.log('---- set new values ----');
+      const newTimeObj = { hours: 0, minutes: 0, seconds: 0, ...newValues }
+      setInitValues({ ...newTimeObj })
+      setTime({ ...newTimeObj })
+    } else setTime({ ...initValues })
   }
 
   const startTimer = (): void => {
