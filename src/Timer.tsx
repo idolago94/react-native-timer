@@ -8,6 +8,7 @@ type TimerProps = {
   autoStart?: boolean;
   onStart?: Function;
   onEnd?: Function;
+  style?: Object;
 
   ref?: any;
 }
@@ -30,7 +31,8 @@ const Timer = forwardRef<TimerHandle, TimerProps>(({
   seconds,
   autoStart,
   onStart,
-  onEnd
+  onEnd,
+  style
 }, ref) => {
   let timeInterval = useRef<ReturnType<typeof setInterval> | null>()
   const [time, setTime] = useState<TimeState>({ hours, minutes, seconds });
@@ -105,7 +107,7 @@ const Timer = forwardRef<TimerHandle, TimerProps>(({
   const getTime = (v: number): string => (v < 10 ? '0' + v : v.toString());
 
   return (
-    <Text>
+    <Text style={style}>
       {getTime(time.hours)}:{getTime(time.minutes)}
       {initValues.seconds === undefined
         ? ''

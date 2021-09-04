@@ -13,6 +13,7 @@ export default function App() {
         seconds={5}
         onStart={() => { console.log('Timer Start !!!!!'); }}
         onEnd={() => { console.log('Timer Finished !!!!!'); }}
+        style={{ fontSize: 40, padding: 5, fontWeight: 'bold' }}
       />
       <Button title='START' onPress={() => timer.current?.start()} />
       <Button title='STOP' onPress={() => timer.current?.stop()} />
