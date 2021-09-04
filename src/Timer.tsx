@@ -10,8 +10,8 @@ type TimerProps = {
 }
 
 type TimeState = {
-  hours?: number;
-  minutes?: number;
+  hours: number;
+  minutes: number;
   seconds?: number;
 }
 
@@ -47,7 +47,9 @@ const Timer = forwardRef<TimerHandle, TimerProps>(({
 
     if (newValues) {
       console.log('---- set new values ----');
-      const newTimeObj = { hours: 0, minutes: 0, seconds: 0, ...newValues }
+      const newTimeObj = newValues
+      if (!newTimeObj.hours) newTimeObj.hours = 0
+      if (!newTimeObj.minutes) newTimeObj.minutes = 0
       setInitValues({ ...newTimeObj })
       setTime({ ...newTimeObj })
     } else setTime({ ...initValues })
