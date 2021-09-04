@@ -21,9 +21,10 @@ type TimeState = {
 }
 
 export type TimerHandle = {
-  start: any;
-  stop: any;
-  reset: any;
+  start: CallableFunction;
+  stop: CallableFunction;
+  reset: CallableFunction;
+  isRunning: CallableFunction;
 }
 
 const Timer = forwardRef<TimerHandle, TimerProps>(({
@@ -47,7 +48,8 @@ const Timer = forwardRef<TimerHandle, TimerProps>(({
   useImperativeHandle(ref, () => ({
     start: startTimer,
     reset: resetTimer,
-    stop: stopTimer
+    stop: stopTimer,
+    isRunning: () => !!timeInterval.current
   }));
 
   const resetTimer = (newValues?: TimeState): void => {

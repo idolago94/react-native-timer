@@ -23,6 +23,7 @@ export default function App() {
         <Text>seconds: 7</Text>
         <Button title='RESET' onPress={() => timer.current?.reset({ seconds: 7 })} />
       </View>
+      <Button title='isRunning?' onPress={() => console.log('is run: ', timer.current?.isRunning())} />
     </View>
   );
 }
