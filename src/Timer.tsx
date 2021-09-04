@@ -1,4 +1,4 @@
-import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useEffect, useState, forwardRef, useImperativeHandle, useRef } from 'react';
 import { Text } from 'react-native';
 // import PropTypes from 'prop-types';
 
@@ -24,7 +24,7 @@ const Timer: React.FC<TimerProps> = forwardRef(({
   seconds,
   autoStart
 }, ref) => {
-  let timerRef: ReturnType<typeof setInterval> | null = null;
+  let timeInterval = useRef<ReturnType<typeof setInterval> | null>()
   const [time, setTime] = useState<{
     hours: number;
     minutes: number;
@@ -32,7 +32,7 @@ const Timer: React.FC<TimerProps> = forwardRef(({
   }>({ hours, minutes, seconds });
   useEffect((): any => {
     autoStart && startTimer();
-    return () => timerRef && clearInterval(timerRef);
+    return () => timeInterval.current && clearInterval(timeInterval.current);
   }, []);
 
   useImperativeHandle(ref, () => ({
@@ -41,27 +41,32 @@ const Timer: React.FC<TimerProps> = forwardRef(({
     stop: stopTimer
   }));
 
-  const resetTimer = (): void => { 
-    console.log('---- resetTimer ----'); 
-    setTime({ hours, minutes, seconds }) 
+  const resetTimer = (): void => {
+    console.log('---- resetTimer ----');
+    if (timeInterval.current) stopTimer()
+    setTime({ hours, minutes, seconds })
   }
 
-  const startTimer = (): void => { 
+  const startTimer = (): void => {
     if (!time.hours && !time.minutes && !time.seconds) {
       console.warn('Can not start timer from zero!')
       return
+    } else if (timeInterval.current) {
+      console.warn('Timer is allready running!')
+      return
     }
-    console.log("---- startTimer ----"); 
-    timerRef = setInterval(continueTimer, seconds !== undefined ? 1000 : 10000) 
+    console.log("---- startTimer ----");
+    timeInterval.current = setInterval(continueTimer, seconds !== undefined ? 1000 : 10000)
   }
 
-  const stopTimer = (): void => { 
-    if (!timerRef) {
+  const stopTimer = (): void => {
+    if (!timeInterval.current) {
       console.warn('Timer is not running!')
       return
     }
-    console.log("---- stopTimer ----"); 
-    clearInterval(timerRef); 
+    console.log("---- stopTimer ----");
+    clearInterval(timeInterval.current);
+    timeInterval.current = null
   }
 
   const continueTimer = (): void => {
